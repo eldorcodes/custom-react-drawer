@@ -2,8 +2,9 @@ import * as React from 'react';
 import { Button, View, Image, ImageBackground, Text } from 'react-native';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { Alert } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 function HomeScreen({ navigation }) {
   return (
@@ -33,24 +34,29 @@ function CustomDrawer(props) {
       {...props}>
         <ImageBackground 
         source={require('./assets/bg-sku.png')} 
-        style={{padding:20}} 
+        style={{padding:20,marginTop:-70,height:300}} 
         >
           <Image 
           source={require('./assets/icon.png')}
-          style={{width:80,height:80,borderRadius:50}} />
+          style={{width:80,height:80,borderRadius:50,marginTop:100}} />
+          <Text style={{color:'#fff',fontWeight:'bold',fontSize:20}}>John Doe</Text>
         </ImageBackground>
       <DrawerItemList {...props}/>
-     <DrawerItem label={'Options'} onPress={() => setShow(!show)} />
+      <TouchableOpacity onPress={() => setShow(!show)}>
+      <View style={{flexDirection:'row',paddingLeft:20,paddingTop:10}}>
+      <FontAwesome5 name="language" size={24} color="black" />
+        <Text style={{paddingLeft:5,paddingRight:5}}>Languages</Text>
+        <Entypo name="plus" size={14} color="black" />
+      </View>
+      </TouchableOpacity>
      {show && <View style={{paddingLeft:20}}>
       <DrawerItem label={'uz'} onPress={() => Alert.alert('Got it')} />
       <DrawerItem label={'ru'} onPress={() => Alert.alert('Got it')} />
       <DrawerItem label={'en'} onPress={() => Alert.alert('Got it')} />
-      <DrawerItem label={'es'} onPress={() => Alert.alert('Got it')} />
+      <DrawerItem label={'es'} onPress={() => props.navigation.closeDrawer()} />
       </View>}
     </DrawerContentScrollView>
-    <View>
-      <Text>Hello new drawer</Text>
-    </View>
+    
     </View>
   );
 }
@@ -62,12 +68,21 @@ export default function App() {
     <NavigationContainer>
       <Drawer.Navigator 
       drawerContent={(props) => <CustomDrawer {...props} />}
-      initialRouteName="Home">
+      initialRouteName="Home"
+      screenOptions={{
+        headerShown:false,
+        drawerLabelStyle:{
+          marginLeft:-20
+        }
+      }}
+      >
         <Drawer.Screen name="Home" component={HomeScreen} options={{
-          drawerIcon:({size,color}) => <AntDesign name="home" size={size} color={color} />
+          drawerIcon:({size,color}) => <AntDesign name="home" size={size} color={color} />,
+          headerShown:true
         }} />
         <Drawer.Screen name="Notifications" component={NotificationsScreen} options={{
-          drawerIcon:({size,color}) => <AntDesign name="setting" size={size} color={color} />
+          drawerIcon:({size,color}) => <AntDesign name="setting" size={size} color={color} />,
+          headerShown:true
         }} />
       </Drawer.Navigator>
     </NavigationContainer>
